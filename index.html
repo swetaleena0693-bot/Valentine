@@ -3,97 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Surprise for Dhiraj ❤️</title>
+    <title>Dhiraj's Lucky Day! 🎡</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --pink: #ff4d6d; --dark-pink: #c9184a; }
-        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #fff0f3; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        body { background: #fff0f3; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
         
-        /* Game UI */
-        #game-ui { text-align: center; z-index: 10; transition: opacity 0.5s; }
-        .progress-container { width: 280px; height: 15px; background: white; border-radius: 20px; border: 2px solid var(--pink); overflow: hidden; margin: 20px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        #progress-bar { width: 0%; height: 100%; background: var(--pink); transition: width 0.3s; }
+        h2 { color: #c9184a; margin-bottom: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
         
-        /* Hearts Styling */
-        .heart { position: absolute; font-size: 35px; cursor: pointer; user-select: none; transition: transform 0.1s; pointer-events: all; z-index: 5; }
-        .heart:active { transform: scale(0.8); }
+        .wheel-container { position: relative; width: 320px; height: 320px; margin-bottom: 30px; }
+        #wheel { width: 100%; height: 100%; border-radius: 50%; border: 8px solid #ff4d6d; transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        #pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 30px; height: 40px; background: #c9184a; clip-path: polygon(50% 100%, 0 0, 100% 0); z-index: 10; border: 2px solid white; }
+        
+        .spin-btn { padding: 15px 45px; font-size: 20px; background: #ff4d6d; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4); transition: 0.2s; }
+        .spin-btn:hover { background: #ff758f; transform: scale(1.05); }
+        .spin-btn:disabled { background: #ccc; box-shadow: none; transform: scale(1); }
 
-        /* Final Reveal Screen */
-        #final-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; flex-direction: column; align-items: center; justify-content: center; z-index: 100; text-align: center; animation: slideUp 1.2s ease-out; }
+        /* The Surprise Overlay */
+        #reveal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); z-index: 100; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: zoomIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
         
-        .photo-frame { position: relative; width: 260px; height: 320px; padding: 10px; background: white; box-shadow: 0 15px 35px rgba(0,0,0,0.15); border-radius: 4px; transform: rotate(-2deg); margin-bottom: 30px; }
-        .photo-frame img { width: 100%; height: 100%; object-fit: cover; border-radius: 2px; }
+        .photo-frame { width: 280px; border: 12px solid white; box-shadow: 0 15px 40px rgba(0,0,0,0.2); margin-bottom: 25px; transform: rotate(-2deg); border-radius: 5px; }
+        .photo-frame img { width: 100%; display: block; border-radius: 2px; }
         
-        .message-container { max-width: 80%; }
-        h1 { color: var(--dark-pink); font-size: 24px; line-height: 1.4; margin: 0; }
-        .signature { color: #888; margin-top: 15px; font-style: italic; }
-
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        h1 { color: #c9184a; padding: 0 25px; font-size: 22px; line-height: 1.5; margin: 0; }
+        .sig { margin-top: 15px; color: #ff758f; font-weight: bold; font-style: italic; }
+        
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
 
-    <div id="game-ui">
-        <h2 style="color: var(--dark-pink); padding: 0 20px;">Dhiraj, catch the hearts to unlock your surprise! ❤️</h2>
-        <div class="progress-container"><div id="progress-bar"></div></div>
+    <h2 id="status">Dhiraj, Spin for a Valentine Prize! 🎁</h2>
+    
+    <div class="wheel-container">
+        <div id="pointer"></div>
+        <canvas id="wheel"></canvas>
     </div>
 
-    <div id="final-screen">
+    <button class="spin-btn" id="spinBtn">SPIN THE WHEEL!</button>
+
+    <div id="reveal">
         <div class="photo-frame">
             <img src="https://github.com/swetaleena0693-bot/Valentine/blob/main/DL.png?raw=true" alt="Dhiraj and Ladlee">
         </div>
-        
-        <div class="message-container">
-            <h1>"In your arms, I've found my home.<br>Happy Valentine's Day to my whole world!<br>I love you :*"</h1>
-            <p class="signature">— Forever Your Lado</p>
-        </div>
-        
-        <div style="font-size: 40px; margin-top: 20px;">💍🌹✨</div>
+        <h1>"In your arms, I've found my home.<br>Happy Valentine's Day to my whole world!<br>I love you :*"</h1>
+        <p class="sig">— Forever Your Lado</p>
+        <div style="font-size: 40px; margin-top: 10px;">🏆🌹✨</div>
     </div>
 
     <script>
-        let score = 0;
-        const target = 5; // Change to 20 if you want the game to last longer!
-        const progressBar = document.getElementById('progress-bar');
-        const finalScreen = document.getElementById('final-screen');
-        const gameUI = document.getElementById('game-ui');
+        const canvas = document.getElementById('wheel');
+        const ctx = canvas.getContext('2d');
+        const spinBtn = document.getElementById('spinBtn');
+        const reveal = document.getElementById('reveal');
+        
+        canvas.width = 320;
+        canvas.height = 320;
+        const centerX = 160;
+        const centerY = 160;
+        const radius = 150;
+        
+        const options = ["Hug", "Kiss", "Movie", "Pizza", "Date", "Choco", "BUMPER", "Joke"];
+        const colors = ["#ffccd5", "#ffffff", "#ffccd5", "#ffffff", "#ffccd5", "#ffffff", "#ff4d6d", "#ffffff"];
 
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.innerHTML = '❤️';
-            heart.className = 'heart';
-            heart.style.left = (Math.random() * 85 + 5) + 'vw';
-            heart.style.top = '-60px';
-            
-            const duration = Math.random() * 2.5 + 2.5;
-            heart.style.transition = `top ${duration}s linear`;
-            
-            document.body.appendChild(heart);
-            setTimeout(() => { heart.style.top = '110vh'; }, 20);
-
-            heart.addEventListener('click', () => {
-                score++;
-                progressBar.style.width = (score / target) * 100 + '%';
-                heart.style.transform = 'scale(2)';
-                heart.style.opacity = '0';
-                setTimeout(() => heart.remove(), 100);
-                if (score >= target) endGame();
+        function drawWheel() {
+            const sliceAngle = (2 * Math.PI) / options.length;
+            options.forEach((opt, i) => {
+                ctx.beginPath();
+                ctx.fillStyle = colors[i];
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, i * sliceAngle, (i + 1) * sliceAngle);
+                ctx.fill();
+                ctx.strokeStyle = "#ffb3c1";
+                ctx.stroke();
+                
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(i * sliceAngle + sliceAngle / 2);
+                ctx.fillStyle = i === 6 ? "white" : "#c9184a";
+                ctx.font = "bold 14px Arial";
+                ctx.fillText(opt, radius / 2.2, 5);
+                ctx.restore();
             });
-
-            setTimeout(() => { if(heart.parentNode) heart.remove(); }, duration * 1000);
         }
 
-        const gameInterval = setInterval(createHeart, 700);
+        drawWheel();
 
-        function endGame() {
-            clearInterval(gameInterval);
-            gameUI.style.opacity = '0';
+        spinBtn.addEventListener('click', () => {
+            spinBtn.disabled = true;
+            document.getElementById('status').innerText = "Good luck, Dhiraj! 🤞";
+            
+            // Rigged to land on BUMPER (Slice 6)
+            const extraDeg = 245; 
+            const totalRotation = (360 * 6) + extraDeg; 
+            canvas.style.transform = `rotate(${totalRotation}deg)`;
+            
             setTimeout(() => {
-                gameUI.style.display = 'none';
-                finalScreen.style.display = 'flex';
-                // Remove any stray hearts
-                document.querySelectorAll('.heart').forEach(h => h.remove());
-            }, 500);
-        }
+                // Confetti Explosion
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#ff4d6d', '#ffccd5', '#ffffff']
+                });
+                
+                // Show Surprise
+                setTimeout(() => {
+                    reveal.style.display = 'flex';
+                }, 1000);
+            }, 4000);
+        });
     </script>
 </body>
 </html>
