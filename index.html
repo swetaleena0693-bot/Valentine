@@ -7,104 +7,47 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root { --pink: #ff4d6d; --dark-pink: #c9184a; --bg-grad: linear-gradient(180deg, #fff0f3 0%, #ffccd5 100%); }
-        
-        body { 
-            background: var(--bg-grad); 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            height: 100vh; 
-            margin: 0; 
-            overflow: hidden; 
-            position: relative;
-        }
-
-        /* Fixed Background Hearts */
-        #heart-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* This ensures Dhiraj can click the buttons! */
-            z-index: 1;
-        }
-
-        .bg-heart {
-            position: absolute;
-            color: rgba(255, 77, 109, 0.3);
-            font-size: 25px;
-            animation: floatUp 7s ease-in infinite;
-        }
-
+        body { background: var(--bg-grad); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; position: relative; }
+        #heart-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .bg-heart { position: absolute; color: rgba(255, 77, 109, 0.3); font-size: 25px; animation: floatUp 7s ease-in infinite; }
         @keyframes floatUp {
             0% { transform: translateY(110vh) translateX(0) rotate(0deg); opacity: 0; }
             10% { opacity: 0.8; }
             50% { transform: translateY(50vh) translateX(20px) rotate(180deg); }
             100% { transform: translateY(-20vh) translateX(-20px) rotate(360deg); opacity: 0; }
         }
-
-        /* Content Styling */
         .content { position: relative; z-index: 10; text-align: center; }
-        
-        h2 { color: var(--dark-pink); font-size: 20px; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-
+        h2 { color: var(--dark-pink); font-size: 20px; margin-bottom: 20px; }
         .wheel-container { position: relative; width: 300px; height: 300px; margin: 0 auto 30px; }
-        #wheel { width: 100%; height: 100%; border-radius: 50%; border: 6px solid white; transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1); background: white; box-shadow: 0 8px 25px rgba(201, 24, 74, 0.2); }
+        #wheel { width: 100%; height: 100%; border-radius: 50%; border: 6px solid white; transition: transform 5s cubic-bezier(0.15, 0, 0.15, 1); background: white; box-shadow: 0 8px 25px rgba(201, 24, 74, 0.2); }
         #pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 25px; height: 35px; background: var(--dark-pink); clip-path: polygon(50% 100%, 0 0, 100% 0); z-index: 20; border: 2px solid white; }
-
-        .spin-btn { 
-            padding: 15px 50px; 
-            font-size: 18px; 
-            background: var(--dark-pink); 
-            color: white; 
-            border: none; 
-            border-radius: 50px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            box-shadow: 0 4px 15px rgba(201, 24, 74, 0.4);
-            -webkit-tap-highlight-color: transparent;
-        }
-        .spin-btn:disabled { background: #d896a8; }
-
-        /* Final Reveal */
+        .spin-btn { padding: 15px 50px; font-size: 18px; background: var(--dark-pink); color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 15px rgba(201, 24, 74, 0.4); }
         #reveal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 100; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: zoomIn 0.8s ease-out; }
-        .photo-frame { width: 260px; border: 10px solid white; box-shadow: 0 15px 40px rgba(0,0,0,0.2); margin-bottom: 20px; transform: rotate(-1.5deg); border-radius: 4px; }
+        .photo-frame { width: 260px; border: 10px solid white; box-shadow: 0 15px 40px rgba(0,0,0,0.2); margin-bottom: 20px; transform: rotate(-1.5deg); }
         .photo-frame img { width: 100%; display: block; }
-        h1 { color: var(--dark-pink); font-size: 20px; padding: 0 30px; line-height: 1.5; }
-        .sig { margin-top: 10px; color: #ff758f; font-weight: bold; font-style: italic; }
-        
+        h1 { color: var(--dark-pink); font-size: 20px; padding: 0 30px; }
         @keyframes zoomIn { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
-
     <div id="heart-container"></div>
-
     <div class="content">
         <h2 id="status">Dhiraj, it's your lucky day!<br>Spin for a prize! 🎁</h2>
-        
         <div class="wheel-container">
             <div id="pointer"></div>
             <canvas id="wheel"></canvas>
         </div>
-
         <button class="spin-btn" id="spinBtn">SPIN NOW</button>
     </div>
-
     <div id="reveal">
         <div class="photo-frame">
             <img src="https://github.com/swetaleena0693-bot/Valentine/blob/main/DL.png?raw=true" alt="Us">
         </div>
         <h1>"In your arms, I've found my home.<br>Happy Valentine's Day to my whole world!<br>I love you :*"</h1>
-        <p class="sig">— Forever Your Lado</p>
-        <div style="font-size: 40px; margin-top: 10px;">🌹👑✨</div>
+        <p style="color: #ff758f; font-weight: bold;">— Forever Your Lado</p>
     </div>
 
     <script>
-        // Smooth Floating Hearts logic
         const container = document.getElementById('heart-container');
         function createHeart() {
             const heart = document.createElement('div');
@@ -117,12 +60,10 @@
         }
         setInterval(createHeart, 400);
 
-        // Wheel Logic
         const canvas = document.getElementById('wheel');
         const ctx = canvas.getContext('2d');
         const options = ["Hug", "Kiss", "Movie", "Pizza", "Date", "Choco", "BUMPER", "Joke"];
         const colors = ["#ffccd5", "#ffffff", "#ffccd5", "#ffffff", "#ffccd5", "#ffffff", "#ff4d6d", "#ffffff"];
-
         canvas.width = 320; canvas.height = 320;
         const centerX = 160; const centerY = 160; const radius = 150;
 
@@ -140,14 +81,14 @@
 
         document.getElementById('spinBtn').addEventListener('click', function() {
             this.disabled = true;
-            this.style.display = 'none';
-            document.getElementById('status').innerText = "Good luck, Dhiraj! ❤️";
-            const rotation = (360 * 7) + 245; // Rigged for BUMPER
+            this.style.opacity = '0.5';
+            // Adjusted calculation: (Full turns) + (offset to hit BUMPER accurately)
+            const rotation = (360 * 10) - 68; 
             canvas.style.transform = `rotate(${rotation}deg)`;
             setTimeout(() => {
                 confetti({ particleCount: 200, spread: 90, origin: { y: 0.7 } });
                 setTimeout(() => { document.getElementById('reveal').style.display = 'flex'; }, 1000);
-            }, 4000);
+            }, 5000);
         });
     </script>
 </body>
