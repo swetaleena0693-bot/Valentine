@@ -80,9 +80,9 @@
             this.disabled = true;
             this.style.opacity = '0.5';
             
-            // MATH UPDATE: Landing center of BUMPER (Slice 6)
-            // Full rotations + 112.5 degrees brings the 6th slice to the pointer
-            const rotation = (360 * 5) + 112.5; 
+            // PRECISION MATH: 5 full turns + 157.5 degrees 
+            // This lands exactly in the dead center of the BUMPER slice.
+            const rotation = (360 * 5) + 157.5; 
             
             canvas.style.transform = `rotate(${rotation}deg)`;
             
