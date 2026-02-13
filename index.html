@@ -28,7 +28,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* This ensures Dhiraj can click the buttons! */
+            pointer-events: none; 
             z-index: 1;
         }
 
@@ -46,13 +46,40 @@
             100% { transform: translateY(-20vh) translateX(-20px) rotate(360deg); opacity: 0; }
         }
 
+        /* Cover Screen */
+        #cover-screen { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: var(--bg-grad); 
+            z-index: 200; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+        }
+        .open-btn { 
+            padding: 15px 40px; 
+            font-size: 20px; 
+            background: var(--dark-pink); 
+            color: white; 
+            border: none; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+            font-weight: bold; 
+        }
+
         /* Content Styling */
-        .content { position: relative; z-index: 10; text-align: center; }
+        .content { position: relative; z-index: 10; text-align: center; display: none; }
         
-        h2 { color: var(--dark-pink); font-size: 20px; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        h2 { color: var(--dark-pink); font-size: 18px; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); padding: 0 20px; line-height: 1.4; }
 
         .wheel-container { position: relative; width: 300px; height: 300px; margin: 0 auto 30px; }
-        #wheel { width: 100%; height: 100%; border-radius: 50%; border: 6px solid white; transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1); background: white; box-shadow: 0 8px 25px rgba(201, 24, 74, 0.2); }
+        #wheel { width: 100%; height: 100%; border-radius: 50%; border: 6px solid white; transition: transform 5s cubic-bezier(0.15, 0, 0.15, 1); background: white; box-shadow: 0 8px 25px rgba(201, 24, 74, 0.2); }
         #pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 25px; height: 35px; background: var(--dark-pink); clip-path: polygon(50% 100%, 0 0, 100% 0); z-index: 20; border: 2px solid white; }
 
         .spin-btn { 
@@ -70,11 +97,12 @@
         .spin-btn:disabled { background: #d896a8; }
 
         /* Final Reveal */
-        #reveal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 100; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: zoomIn 0.8s ease-out; }
-        .photo-frame { width: 260px; border: 10px solid white; box-shadow: 0 15px 40px rgba(0,0,0,0.2); margin-bottom: 20px; transform: rotate(-1.5deg); border-radius: 4px; }
+        #reveal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 100; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: zoomIn 0.8s ease-out; padding: 20px; box-sizing: border-box; overflow-y: auto;}
+        .photo-frame { width: 250px; border: 10px solid white; box-shadow: 0 15px 40px rgba(0,0,0,0.2); margin-bottom: 15px; transform: rotate(-1.5deg); border-radius: 4px; flex-shrink: 0;}
         .photo-frame img { width: 100%; display: block; }
-        h1 { color: var(--dark-pink); font-size: 20px; padding: 0 30px; line-height: 1.5; }
-        .sig { margin-top: 10px; color: #ff758f; font-weight: bold; font-style: italic; }
+        h1 { color: var(--dark-pink); font-size: 18px; padding: 0 20px; line-height: 1.5; margin: 10px 0; }
+        .story-text { color: #555; font-size: 14px; line-height: 1.5; padding: 0 20px; margin-bottom: 10px; }
+        .sig { color: #ff758f; font-weight: bold; font-style: italic; margin-top: 5px; }
         
         @keyframes zoomIn { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
     </style>
@@ -83,8 +111,14 @@
 
     <div id="heart-container"></div>
 
-    <div class="content">
-        <h2 id="status">Dhiraj, let's see if your luck is as good as your choice of life partner! <br>Spin for a prize! 🎁</h2>
+    <div id="cover-screen">
+        <div style="font-size: 60px; margin-bottom: 20px;">✉️</div>
+        <h2 style="margin-bottom: 30px;">A Special Valentine's Delivery<br>for Dhiraj...</h2>
+        <button class="open-btn" onclick="startApp()">Tap to Open</button>
+    </div>
+
+    <div class="content" id="main-content">
+        <h2 id="status">Dhiraj, let's see if your luck is as good as your choice of life partner!😂 <br>Spin for a prize! 🎁</h2>
         
         <div class="wheel-container">
             <div id="pointer"></div>
@@ -99,12 +133,19 @@
             <img src="https://github.com/swetaleena0693-bot/Valentine/blob/main/DL.png?raw=true" alt="Us">
         </div>
         <h1>Happy Valentine's Day Love!<br>In your arms, I've found my home ❤️</h1>
+        <p class="story-text">
+            You have your forever valentine in your arms for life, what else do you need greedy! 😂<br><br>
+            To my world—and seeing the world with you and creating many more such memories together. 🌎✨
+        </p>
         <p class="sig">— Forever Your Lado</p>
-        <div style="font-size: 40px; margin-top: 10px;">🌹👑✨</div>
     </div>
 
     <script>
-        // Smooth Floating Hearts logic
+        function startApp() {
+            document.getElementById('cover-screen').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+        }
+
         const container = document.getElementById('heart-container');
         function createHeart() {
             const heart = document.createElement('div');
@@ -117,7 +158,6 @@
         }
         setInterval(createHeart, 400);
 
-        // Wheel Logic
         const canvas = document.getElementById('wheel');
         const ctx = canvas.getContext('2d');
         const options = ["Hug", "Kiss", "Movie", "Pizza", "Date", "Choco", "BUMPER", "Joke"];
@@ -141,13 +181,18 @@
         document.getElementById('spinBtn').addEventListener('click', function() {
             this.disabled = true;
             this.style.display = 'none';
-            document.getElementById('status').innerText = "Hold your heart...Here we go... 💓 ❤️";
-            const rotation = (360 * 5) + 337.5; // Rigged for BUMPER
+            document.getElementById('status').innerHTML = "Hold your heart...Here we go... 💓 ❤️";
+            
+            // MATH: Brings index 6 (BUMPER) to the top (270deg position)
+            // 360 - (index 6 center in degrees) + 270 (pointer)
+            // (360 * 5 full spins) + 157.5 
+            const rotation = (360 * 5) + 337.5; 
+            
             canvas.style.transform = `rotate(${rotation}deg)`;
             setTimeout(() => {
                 confetti({ particleCount: 200, spread: 90, origin: { y: 0.7 } });
                 setTimeout(() => { document.getElementById('reveal').style.display = 'flex'; }, 1000);
-            }, 4000);
+            }, 5000);
         });
     </script>
 </body>
