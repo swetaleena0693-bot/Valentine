@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Surprise for Dhiraj ❤️</title>
+    <style>
+        :root { --pink: #ff4d6d; --dark-pink: #c9184a; }
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #fff0f3; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        
+        /* Game UI */
+        #game-ui { text-align: center; z-index: 10; transition: opacity 0.5s; }
+        .progress-container { width: 280px; height: 15px; background: white; border-radius: 20px; border: 2px solid var(--pink); overflow: hidden; margin: 20px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        #progress-bar { width: 0%; height: 100%; background: var(--pink); transition: width 0.3s; }
+        
+        /* Hearts Styling */
+        .heart { position: absolute; font-size: 35px; cursor: pointer; user-select: none; transition: transform 0.1s; pointer-events: all; z-index: 5; }
+        .heart:active { transform: scale(0.8); }
+
+        /* Final Reveal Screen */
+        #final-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; flex-direction: column; align-items: center; justify-content: center; z-index: 100; text-align: center; animation: slideUp 1.2s ease-out; }
+        
+        .photo-frame { position: relative; width: 260px; height: 320px; padding: 10px; background: white; box-shadow: 0 15px 35px rgba(0,0,0,0.15); border-radius: 4px; transform: rotate(-2deg); margin-bottom: 30px; }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; border-radius: 2px; }
+        
+        .message-container { max-width: 80%; }
+        h1 { color: var(--dark-pink); font-size: 24px; line-height: 1.4; margin: 0; }
+        .signature { color: #888; margin-top: 15px; font-style: italic; }
+
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div id="game-ui">
+        <h2 style="color: var(--dark-pink); padding: 0 20px;">Dhiraj, catch the hearts to unlock your surprise! ❤️</h2>
+        <div class="progress-container"><div id="progress-bar"></div></div>
+    </div>
+
+    <div id="final-screen">
+        <div class="photo-frame">
+            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=500" alt="Dhiraj and You">
+        </div>
+        
+        <div class="message-container">
+            <h1>"In your arms, I've found my home.<br>Happy Valentine's Day to my whole world!<br>I love you :*"</h1>
+            <p class="signature">— Forever Yours</p>
+        </div>
+        
+        <div style="font-size: 40px; margin-top: 20px;">💍🌹✨</div>
+    </div>
+
+    <script>
+        let score = 0;
+        const target = 10; // Change to 20 if you want the game to last longer!
+        const progressBar = document.getElementById('progress-bar');
+        const finalScreen = document.getElementById('final-screen');
+        const gameUI = document.getElementById('game-ui');
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.className = 'heart';
+            heart.style.left = (Math.random() * 85 + 5) + 'vw';
+            heart.style.top = '-60px';
+            
+            const duration = Math.random() * 2.5 + 2.5;
+            heart.style.transition = `top ${duration}s linear`;
+            
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.style.top = '110vh'; }, 20);
+
+            heart.addEventListener('click', () => {
+                score++;
+                progressBar.style.width = (score / target) * 100 + '%';
+                heart.style.transform = 'scale(2)';
+                heart.style.opacity = '0';
+                setTimeout(() => heart.remove(), 100);
+                if (score >= target) endGame();
+            });
+
+            setTimeout(() => { if(heart.parentNode) heart.remove(); }, duration * 1000);
+        }
+
+        const gameInterval = setInterval(createHeart, 700);
+
+        function endGame() {
+            clearInterval(gameInterval);
+            gameUI.style.opacity = '0';
+            setTimeout(() => {
+                gameUI.style.display = 'none';
+                finalScreen.style.display = 'flex';
+                // Remove any stray hearts
+                document.querySelectorAll('.heart').forEach(h => h.remove());
+            }, 500);
+        }
+    </script>
+</body>
+</html>
